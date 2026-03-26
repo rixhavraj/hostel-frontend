@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { FiSave, FiBell, FiToggleLeft, FiToggleRight, FiInfo } from "react-icons/fi";
+import { FiSave, FiBell, FiToggleLeft, FiToggleRight, FiInfo, FiCheckCircle } from "react-icons/fi";
 import API_URL from "../../api";
 
 export default function SettingsTab() {
