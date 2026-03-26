@@ -60,11 +60,7 @@ export default function Rooms() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         ) : (
-          <motion.div
-            ref={ref}
-            initial="hidden"
-            animate={inView ? "show" : "hidden"}
-            transition={{ staggerChildren: 0.12 }}
+          <div
             className="grid gap-8 md:grid-cols-3"
           >
             {rooms.length > 0 ? (
@@ -103,7 +99,7 @@ export default function Rooms() {
                         </span>
                     </div>
                     <a
-                      href="/#booking-form"
+                      href={`/#booking-form?roomType=${encodeURIComponent(room.title)}`}
                       className="btn-primary w-full justify-center py-3 rounded-xl text-sm"
                       style={{ display: "flex" }}
                     >
@@ -117,7 +113,7 @@ export default function Rooms() {
                 <p className="text-xl font-medium text-slate-500">No rooms listed yet.</p>
               </div>
             )}
-          </motion.div>
+          </div>
         )}
 
         {/* CTA note */}

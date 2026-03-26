@@ -10,6 +10,8 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [settings, setSettings] = useState(null);
+  const [rooms, setRooms] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -27,18 +29,26 @@ export default function Navbar() {
         console.error("Error fetching settings:", err);
       }
     };
+
+    const fetchRooms = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/api/rooms`);
+        setRooms(res.data);
+      } catch (err) {
+        console.error("Error fetching rooms:", err);
+      }
+    };
     fetchSettings();
+    fetchRooms();
     // Refresh every 30 seconds for "instant" updates feel
-    const interval = setInterval(fetchSettings, 30000);
+    const interval = setInterval(() => {
+        fetchSettings();
+        fetchRooms();
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  const navLinks = [
-    { to: "/", label: "Home", end: true },
-    { to: "/rooms", label: "Rooms" },
-    { to: "/gallery", label: "Gallery" },
-    { to: "/contact", label: "Contact" },
-  ];
+
 
   const linkClass = ({ isActive }) =>
     `relative px-1 py-1 text-sm font-medium transition-colors duration-200 ${
@@ -90,21 +100,27 @@ export default function Navbar() {
 
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map(({ to, label, end }) => (
-              <NavLink key={to} to={to} end={end} className={linkClass}>
-                {({ isActive }) => (
-                  <>
-                    {label}
-                    {isActive && (
-                      <motion.span
-                        layoutId="navbar-indicator"
-                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-blue-600 rounded-full"
-                      />
-                    )}
-                  </>
-                )}
-              </NavLink>
-            ))}
+            <NavLink to="/" end className={linkClass}>Home</NavLink>
+            
+            {/* Rooms Dropdown */}
+            <div className="relative group">
+              <NavLink to="/rooms" className={linkClass}>Rooms</NavLink>
+              <div className="absolute top-full left-0 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 mt-2 z-[100] opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
+                {rooms.map(room => (
+                  <Link 
+                    key={room._id}
+                    to={`/rooms#${room._id}`}
+                    className="block px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all"
+                  >
+                    {room.title}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <NavLink to="/gallery" className={linkClass}>Gallery</NavLink>
+            <NavLink to="/contact" className={linkClass}>Contact</NavLink>
+            
             <a
               href={isHome ? "#booking-form" : "/#booking-form"}
               className="btn-primary text-sm px-5 py-2.5"
@@ -145,25 +161,28 @@ export default function Navbar() {
               className="lg:hidden overflow-hidden border-t border-slate-100 bg-white"
             >
               <div className="mx-auto flex max-w-6xl flex-col px-4 py-3 gap-1">
-                {navLinks.map(({ to, label, end }) => (
-                  <NavLink
-                    key={to}
-                    to={to}
-                    end={end}
-                    onClick={() => setMobileOpen(false)}
-                    className={({ isActive }) =>
-                      `px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                        isActive ? "bg-blue-50 text-blue-600" : "text-slate-700 hover:bg-slate-50"
-                      }`
-                    }
-                  >
-                    {label}
-                  </NavLink>
-                ))}
+                <NavLink to="/" end onClick={() => setMobileOpen(false)} className={({ isActive }) => `px-3 py-2.5 rounded-lg text-sm font-medium ${isActive ? "bg-blue-50 text-blue-600" : "text-slate-700"}`}>Home</NavLink>
+                
+                {/* Mobile Rooms Section */}
+                <div className="px-3 py-2">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Our Rooms</p>
+                  <div className="grid grid-cols-1 gap-1 pl-2 border-l-2 border-slate-100">
+                    <Link to="/rooms" onClick={() => setMobileOpen(false)} className="text-sm font-medium py-1.5 text-slate-600">All Rooms</Link>
+                    {rooms.map(room => (
+                      <Link key={room._id} to={`/rooms#${room._id}`} onClick={() => setMobileOpen(false)} className="text-sm py-1.5 text-slate-500 hover:text-blue-600">
+                        {room.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <NavLink to="/gallery" onClick={() => setMobileOpen(false)} className={({ isActive }) => `px-3 py-2.5 rounded-lg text-sm font-medium ${isActive ? "bg-blue-50 text-blue-600" : "text-slate-700"}`}>Gallery</NavLink>
+                <NavLink to="/contact" onClick={() => setMobileOpen(false)} className={({ isActive }) => `px-3 py-2.5 rounded-lg text-sm font-medium ${isActive ? "bg-blue-50 text-blue-600" : "text-slate-700"}`}>Contact</NavLink>
+                
                 <a
                   href={isHome ? "#booking-form" : "/#booking-form"}
                   onClick={() => setMobileOpen(false)}
-                  className="btn-primary mt-2 justify-center py-2.5"
+                  className="btn-primary mt-4 justify-center py-3"
                 >
                   Book Now
                 </a>

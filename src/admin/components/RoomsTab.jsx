@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FiPlus, FiEdit2, FiTrash2, FiUpload, FiX } from "react-icons/fi";
+import { FiPlus, FiEdit2, FiTrash2, FiUpload, FiX, FiImage } from "react-icons/fi";
 import API_URL from "../../api";
 import axios from "axios";
 
@@ -10,14 +10,6 @@ export default function RoomsTab({ rooms, fetchData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const roomData = {
-      title: formData.get("title"),
-      price: formData.get("price"),
-      capacity: formData.get("capacity"),
-      description: formData.get("description"),
-      tag: formData.get("tag"),
-    };
-
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
@@ -25,6 +17,7 @@ export default function RoomsTab({ rooms, fetchData }) {
         title: formData.get("title"),
         price: Number(formData.get("price")),
         capacity: Number(formData.get("capacity")),
+        availableBeds: Number(formData.get("availableBeds")),
         description: formData.get("description"),
         tag: formData.get("tag"),
       };
@@ -54,6 +47,20 @@ export default function RoomsTab({ rooms, fetchData }) {
       fetchData();
     } catch (err) {
       alert("Error deleting room");
+    }
+  };
+
+  const handleImageDelete = async (roomId, imageUrl) => {
+    if (!window.confirm("Delete this image?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_URL}/api/rooms/${roomId}/image`, {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { imageUrl }
+      });
+      fetchData();
+    } catch (err) {
+      alert("Error deleting image: " + (err.response?.data?.error || err.message));
     }
   };
 
@@ -107,6 +114,23 @@ export default function RoomsTab({ rooms, fetchData }) {
               </div>
               <p className="text-slate-500 text-xs mb-6 line-clamp-2">{room.description}</p>
               
+              {/* Thumbnail strip */}
+              {room.images?.length > 0 && (
+                <div className="flex gap-2 overflow-x-auto pb-2 mb-4 scrollbar-thin">
+                   {room.images.map((img, idx) => (
+                     <div key={idx} className="relative group/img shrink-0">
+                        <img src={img} className="w-12 h-12 rounded-lg object-cover border border-slate-200" alt="" />
+                        <button 
+                          onClick={() => handleImageDelete(room._id, img)}
+                          className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover/img:opacity-100 transition-opacity"
+                        >
+                          <FiX size={10} />
+                        </button>
+                     </div>
+                   ))}
+                </div>
+              )}
+
               <div className="flex items-center gap-2">
                 <button 
                   onClick={() => setModal({ show: true, mode: 'edit', data: room })}
@@ -140,6 +164,7 @@ export default function RoomsTab({ rooms, fetchData }) {
               <div className="grid grid-cols-2 gap-4">
                 <input name="price" type="number" defaultValue={modal.data?.price} placeholder="Price (₹)" required className="input-field" />
                 <input name="capacity" type="number" defaultValue={modal.data?.capacity} placeholder="Capacity" required className="input-field" />
+                <input name="availableBeds" type="number" defaultValue={modal.data?.availableBeds} placeholder="Available Beds" required className="input-field" />
               </div>
               <input name="tag" defaultValue={modal.data?.tag} placeholder="Tag (e.g. Popular)" className="input-field" />
               <textarea name="description" defaultValue={modal.data?.description} placeholder="Description" rows={3} className="input-field py-3" />

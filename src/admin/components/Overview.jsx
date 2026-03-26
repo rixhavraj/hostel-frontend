@@ -7,6 +7,7 @@ export default function Overview({ data }) {
     { label: "Confirmed", value: data.bookings.filter(b => b.status === 'confirmed').length, icon: <FiCheckCircle />, color: "bg-green-500" },
     { label: "Cancelled", value: data.bookings.filter(b => b.status === 'cancelled').length, icon: <FiXCircle />, color: "bg-red-500" },
     { label: "Total Rooms", value: data.rooms.length, icon: <FiTrendingUp />, color: "bg-blue-500" },
+    { label: "Total Messages", value: data.messages?.length || 0, icon: <FiTrendingUp />, color: "bg-purple-500" },
   ];
 
   return (

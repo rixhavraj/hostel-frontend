@@ -1,5 +1,6 @@
 /* Redacted: Updating Home.jsx to fetch real rooms from backend */
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, useInView, useMotionValue, useSpring } from "framer-motion";
 import API_URL from "../api";
 import axios from "axios";
@@ -93,6 +94,7 @@ function Section({ children, className = "", ...props }) {
 }
 
 export default function Home() {
+  const [searchParams] = useSearchParams();
   const [rooms, setRooms] = useState([]);
   const [form, setForm] = useState({
     fullName: "", email: "", mobile: "", roomType: "", moveInDate: "",
@@ -106,7 +108,10 @@ export default function Home() {
       try {
         const res = await axios.get(`${API_URL}/api/rooms`);
         setRooms(res.data);
-        if (res.data.length > 0) {
+        const rt = searchParams.get("roomType");
+        if (rt) {
+          setForm(f => ({ ...f, roomType: rt }));
+        } else if (res.data.length > 0) {
           setForm(f => ({ ...f, roomType: res.data[0].title }));
         }
       } catch (err) {
@@ -116,7 +121,7 @@ export default function Home() {
       }
     };
     fetchRooms();
-  }, []);
+  }, [searchParams]);
 
   const showToast = (msg, type = "success") => {
     setToast({ msg, type });
@@ -125,6 +130,11 @@ export default function Home() {
 
   const handleChange = (e) =>
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+
+  const scrollToBooking = (roomTitle) => {
+    setForm(p => ({ ...p, roomType: roomTitle }));
+    document.getElementById("booking-form")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -250,7 +260,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="flex flex-col items-center"><Counter target={500} suffix="+" /><p className="text-sm text-slate-500 font-medium">Happy Residents</p></div>
-            <div className="flex flex-col items-center"><Counter target={3} suffix="+" /><p className="text-sm text-slate-500 font-medium">Room Types</p></div>
+            <div className="flex flex-col items-center"><Counter target={rooms.length || 3} suffix="+" /><p className="text-sm text-slate-500 font-medium">Room Types</p></div>
             <div className="flex flex-col items-center"><Counter target={24} suffix="/7" /><p className="text-sm text-slate-500 font-medium">Security</p></div>
             <div className="flex flex-col items-center"><Counter target={5} suffix="★" /><p className="text-sm text-slate-500 font-medium">Google Rating</p></div>
           </div>
@@ -261,10 +271,10 @@ export default function Home() {
       <Section className="mx-auto max-w-6xl px-4 py-16">
         <div className="flex items-end justify-between mb-10">
           <div>
-            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">Our Rooms</p>
-            <h2 className="text-3xl font-bold text-slate-900 section-title">Room Types & Pricing</h2>
+            <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">Featured Choices</p>
+            <h2 className="text-3xl font-bold text-slate-900 section-title">Popular Room Types</h2>
           </div>
-          <a href="/rooms" className="hidden md:flex items-center gap-1 text-sm font-semibold text-blue-600 hover:underline">View all <FiArrowRight /></a>
+          <a href="/rooms" className="hidden md:flex items-center gap-1 text-sm font-semibold text-blue-600 hover:underline">View all catalog <FiArrowRight /></a>
         </div>
 
         {roomsLoading ? (
@@ -281,7 +291,7 @@ export default function Home() {
                 <div className="p-5">
                     <h3 className="text-lg font-bold text-slate-900 mb-3">{room.title}</h3>
                     <p className="text-sm text-slate-500 mb-4 line-clamp-2">{room.description || "Fully furnished and comfortable rooms with high-speed Wi-Fi and security."}</p>
-                    <a href="#booking" className="btn-primary w-full justify-center text-sm py-2.5 rounded-xl block text-center">Book Now</a>
+                    <button onClick={() => scrollToBooking(room.title)} className="btn-primary w-full justify-center text-sm py-2.5 rounded-xl block text-center">Book Now</button>
                 </div>
                 </motion.article>
             )) : (
@@ -311,6 +321,34 @@ export default function Home() {
           </div>
         </Section>
       </section>
+
+      {/* Other Rooms Section */}
+      {!roomsLoading && rooms.length > 3 && (
+        <section className="py-16 bg-white">
+          <Section className="mx-auto max-w-6xl px-4">
+            <div className="mb-10">
+              <p className="text-sm font-semibold text-purple-600 uppercase tracking-wider mb-2">More Options</p>
+              <h2 className="text-3xl font-bold text-slate-900 section-title">Additional Room Types</h2>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3">
+              {rooms.slice(3).map((room, i) => (
+                <motion.article key={room._id} variants={fadeUp} className="card-hover group relative overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-100">
+                  <div className="relative h-52 overflow-hidden">
+                    <img src={room.images?.[0] || "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80"} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    <div className="absolute top-3 left-3 text-xs font-bold text-white px-3 py-1 rounded-full bg-purple-600">{room.tag || "Available"}</div>
+                    <div className="absolute bottom-3 left-3"><p className="text-2xl font-extrabold text-white">₹{room.price}</p><p className="text-xs text-white/70">/ month</p></div>
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-lg font-bold text-slate-900 mb-3">{room.title}</h3>
+                    <p className="text-sm text-slate-500 mb-4 line-clamp-2">{room.description || "Quality living space at affordable prices."}</p>
+                    <button onClick={() => scrollToBooking(room.title)} className="btn-secondary w-full justify-center text-sm py-2.5 rounded-xl block text-center">Book Now</button>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          </Section>
+        </section>
+      )}
 
       {/* BOOKING */}
       <section id="booking-form" className="py-16 bg-blue-600">
