@@ -8,8 +8,7 @@ import {
   FiWifi, FiShield, FiDroplet, FiHome, FiStar, FiCheck,
   FiArrowRight, FiPhone, FiMessageCircle
 } from "react-icons/fi";
-import {
-  MdOutlineLocalLaundryService, MdOutlineDirectionsBike,
+import { MdOutlineLocalLaundryService, MdOutlineDirectionsBike,
   MdOutlineFoodBank, MdOutlineSecurity
 } from "react-icons/md";
 
@@ -174,7 +173,7 @@ export default function Home() {
 
       <section className="relative min-h-[88vh] flex items-center overflow-hidden hero-bg">
         <div className="absolute top-[-120px] right-[-120px] w-[500px] h-[500px] rounded-full opacity-30 bg-blue-400 blur-3xl" />
-        <div className="absolute bottom-[-80px] left-[-80px] w-[400px] h-[400px] rounded-full opacity-20 bg-purple-400 blur-3xl" />
+        <div className="absolute bottom-20 left-20 w-[400px] h-[400px] rounded-full opacity-20 bg-purple-400 blur-3xl" />
 
         <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 grid gap-12 md:grid-cols-2 md:items-center">
           <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}>
@@ -306,7 +305,7 @@ export default function Home() {
       {/* (Self-correction: I must provide FULL code if using write_to_file) */}
       
       {/* AMENITIES */}
-      <section className="bg-gradient-to-br from-slate-50 to-blue-50/50 py-16">
+      <section className="bg-linear-to-br from-slate-50 to-blue-50/50 py-16">
         <Section className="mx-auto max-w-6xl px-4">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-2">Everything Included</p>

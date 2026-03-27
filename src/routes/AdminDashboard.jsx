@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import {motion, AnimatePresence } from "framer-motion";
 import API_URL from "../api";
 
 // Components
@@ -22,10 +22,10 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const h = { Authorization: `Bearer ${token}` };
+      const h = { Authorization: `Bearer ${localStorage.getItem("token")}` };
       const [r, b, g] = await Promise.all([
         axios.get(`${API_URL}/api/rooms`),
         axios.get(`${API_URL}/api/bookings`, { headers: h }),
@@ -33,16 +33,23 @@ export default function AdminDashboard() {
       ]);
       setData({ rooms: r.data, bookings: b.data, gallery: g.data });
     } catch (err) {
-      if (err.response?.status === 401) navigate("/admin/login");
+      if (err.response?.status === 401) {
+        navigate("/admin/login");
+      } else if (!err.response) {
+        alert("Error: Cannot connect to the server. Please check if the backend is running.");
+      } else {
+        // Handle other server errors (500, etc.)
+        console.error("Server Error:", err.response.status);
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
 
   useEffect(() => {
     if (!token) navigate("/admin/login");
     else fetchData();
-  }, [token]);
+  }, [token, fetchData, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");

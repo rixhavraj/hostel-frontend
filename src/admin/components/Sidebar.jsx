@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import {  AnimatePresence } from "framer-motion";
 import { FiGrid, FiHome, FiCalendar, FiImage, FiLogOut, FiUser, FiMail, FiSettings, FiX } from "react-icons/fi";
 
 export default function Sidebar({ activeTab, setActiveTab, handleLogout, isOpen, onClose }) {
@@ -26,7 +26,7 @@ export default function Sidebar({ activeTab, setActiveTab, handleLogout, isOpen,
         )}
       </AnimatePresence>
 
-      <aside className={`fixed inset-y-0 left-0 w-72 bg-white/80 backdrop-blur-xl border-r border-white/20 p-6 z-[60] transition-transform duration-500 lg:relative lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 w-72 bg-white/80 backdrop-blur-xl border-r border-white/20 p-6 z-60 transition-transform duration-500 lg:relative lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         {/* Close Button Mobile */}
         <button 
           onClick={onClose}

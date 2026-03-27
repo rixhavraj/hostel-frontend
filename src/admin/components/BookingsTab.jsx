@@ -9,7 +9,7 @@ export default function BookingsTab({ bookings, fetchData }) {
       await axios.patch(`${API_URL}/api/bookings/${id}`, { status }, { headers: { Authorization: `Bearer ${token}` } });
       fetchData();
     } catch (err) {
-      alert("Error updating status");
+      alert("Error updating status", err);
     }
   };
 
@@ -20,7 +20,7 @@ export default function BookingsTab({ bookings, fetchData }) {
       await axios.delete(`${API_URL}/api/bookings/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       fetchData();
     } catch (err) {
-      alert("Error deleting booking");
+      alert("Error deleting booking", err);
     }
   };
 
@@ -31,7 +31,7 @@ export default function BookingsTab({ bookings, fetchData }) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white/60 backdrop-blur-md p-6 rounded-[2rem] border border-white shadow-xl shadow-slate-200/50">
+      <div className="bg-white/60 backdrop-blur-md p-6 rounded-4xl border border-white shadow-xl shadow-slate-200/50">
         <h2 className="text-2xl font-black text-slate-800">Reservation Requests</h2>
         <p className="text-slate-500 text-sm">Review and manage student bookings</p>
       </div>
@@ -95,8 +95,8 @@ export default function BookingsTab({ bookings, fetchData }) {
           </thead>
           <tbody>
             {bookings.map((b) => (
-              <tr key={b._id} className="bg-white/80 backdrop-blur-md rounded-[2rem] shadow-sm hover:shadow-md transition-shadow group">
-                <td className="px-6 py-5 rounded-l-[2rem] border-y border-l border-white/50">
+              <tr key={b._id} className="bg-white/80 backdrop-blur-md rounded-4xl shadow-sm hover:shadow-md transition-shadow group">
+                <td className="px-6 py-5 rounded-l-4xl border-y border-l border-white/50">
                   <div className="flex flex-col gap-1">
                     <span className="font-black text-slate-800 flex items-center gap-2">
                        {b.name}
@@ -136,7 +136,7 @@ export default function BookingsTab({ bookings, fetchData }) {
                     <option value="cancelled">Cancelled</option>
                   </select>
                 </td>
-                <td className="px-6 py-5 text-right rounded-r-[2rem] border-y border-r border-white/50 font-bold">
+                <td className="px-6 py-5 text-right rounded-r-4xl border-y border-r border-white/50 font-bold">
                    <button 
                      onClick={() => deleteBooking(b._id)}
                      className="text-slate-300 hover:text-red-500 transition-colors p-2"

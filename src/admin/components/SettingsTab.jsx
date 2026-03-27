@@ -38,7 +38,7 @@ export default function SettingsTab() {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      alert("Error saving settings");
+      alert("Error saving settings",err);
     } finally {
       setSaving(false);
     }
@@ -48,7 +48,7 @@ export default function SettingsTab() {
 
   return (
     <div className="max-w-4xl space-y-6">
-      <div className="bg-white/60 backdrop-blur-md p-6 rounded-[2rem] border border-white shadow-xl shadow-slate-200/50">
+      <div className="bg-white/60 backdrop-blur-md p-6 rounded-4xl border border-white shadow-xl shadow-slate-200/50">
         <h2 className="text-2xl font-black text-slate-800">Site Settings</h2>
         <p className="text-slate-500 text-sm">Manage global features and notifications</p>
       </div>
@@ -100,7 +100,7 @@ export default function SettingsTab() {
             <button
               type="submit"
               disabled={saving}
-              className="btn-primary min-w-[160px] justify-center py-4 rounded-2xl shadow-xl shadow-blue-200"
+              className="btn-primary min-w-40 justify-center py-4 rounded-2xl shadow-xl shadow-blue-200"
             >
               {saving ? (
                 <div className="flex items-center gap-2">

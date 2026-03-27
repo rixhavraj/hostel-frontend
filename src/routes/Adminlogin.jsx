@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { motion } from "framer-motion";
+{/*import { motion } from "framer-motion";*/}
 import { FiMail, FiLock, FiArrowRight, FiShield } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../api";
@@ -15,7 +15,7 @@ export default function AdminLogin() {
   // Redirect if already logged in
   useEffect(() => {
     if (localStorage.getItem("token")) navigate("/admin");
-  }, []);
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ export default function AdminLogin() {
       localStorage.setItem("token", res.data.token);
       navigate("/admin");
     } catch (err) {
-      setError("Invalid admin credentials. Please try again.");
+      setError("Invalid admin credentials. Please try again.", err);
     } finally {
       setLoading(false);
     }
@@ -42,7 +42,7 @@ export default function AdminLogin() {
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-md"
       >
-        <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-white">
+        <div className="bg-white rounded-4xl shadow-2xl overflow-hidden border border-white">
           <div className="bg-blue-600 p-8 text-center text-white">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
               <FiShield size={32} />
@@ -118,7 +118,7 @@ export default function AdminLogin() {
         </div>
         
         <p className="text-center mt-8 text-slate-400 text-sm">
-          &copy; 2024 RPH Hostel Management System
+          &copy; 2024 A1 Hostel Management System
         </p>
       </motion.div>
     </div>

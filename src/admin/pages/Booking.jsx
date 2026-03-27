@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import Sidebar from "../../../../admin/src/components/Sidebar";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function Bookings() {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get("http://localhost:5000/api/bookings", {
+      const res = await axios.get(`${API_URL}/api/bookings`, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       });
       setBookings(res.data);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import {motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX, FiBell } from "react-icons/fi";
 import { MdHotel } from "react-icons/md";
 import axios from "axios";
@@ -11,7 +11,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [settings, setSettings] = useState(null);
   const [rooms, setRooms] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+ {/* const [dropdownOpen, setDropdownOpen] = useState(false);*/}
   const location = useLocation();
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="bg-blue-600 text-white py-2 px-4 text-center text-[11px] md:text-xs font-bold tracking-wide relative z-[60]"
+            className="bg-blue-600 text-white py-2 px-4 text-center text-[11px] md:text-xs font-bold tracking-wide relative z-60"
           >
             <div className="flex items-center justify-center gap-2 overflow-hidden whitespace-nowrap">
                <FiBell className="animate-bounce" />
@@ -105,7 +105,7 @@ export default function Navbar() {
             {/* Rooms Dropdown */}
             <div className="relative group">
               <NavLink to="/rooms" className={linkClass}>Rooms</NavLink>
-              <div className="absolute top-full left-0 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 mt-2 z-[100] opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all">
+              <div className="absolute top-full left-0 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 mt-2 z-100 opacity-0 group-hover:opacity-100 invisible group:visible transition-all">
                 {rooms.map(room => (
                   <Link 
                     key={room._id}
