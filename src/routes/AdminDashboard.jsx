@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {motion, AnimatePresence } from "framer-motion";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import API_URL from "../api";
 
 // Components
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
 
       <main className="flex-1 overflow-y-auto p-6 md:p-10 relative mt-16 lg:mt-0">
         <AnimatePresence mode="wait">
-          <motion.div
+          <Motion.div
             key={activeTab}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
             {activeTab === "gallery" && <GalleryTab gallery={data.gallery} fetchData={fetchData} />}
             {activeTab === "messages" && <MessagesTab fetchData={fetchData} />}
             {activeTab === "settings" && <SettingsTab />}
-          </motion.div>
+          </Motion.div>
         </AnimatePresence>
       </main>
     </div>

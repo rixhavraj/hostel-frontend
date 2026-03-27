@@ -1,4 +1,4 @@
-import {  AnimatePresence } from "framer-motion";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import { FiGrid, FiHome, FiCalendar, FiImage, FiLogOut, FiUser, FiMail, FiSettings, FiX } from "react-icons/fi";
 
 export default function Sidebar({ activeTab, setActiveTab, handleLogout, isOpen, onClose }) {
@@ -16,7 +16,7 @@ export default function Sidebar({ activeTab, setActiveTab, handleLogout, isOpen,
       {/* Backdrop for mobile */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
