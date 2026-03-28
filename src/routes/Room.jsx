@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion as Motion } from "framer-motion";
 import { FiCheck, FiArrowRight, FiStar } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -10,8 +10,7 @@ const fadeUp = { hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0 } };
 export default function Rooms() {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -35,7 +34,7 @@ export default function Rooms() {
         style={{ background: "linear-gradient(135deg, #dbeafe 0%, #ede9fe 60%, #fce7f3 100%)" }}
       >
         <div className="mx-auto max-w-6xl text-center">
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -49,7 +48,7 @@ export default function Rooms() {
             <p className="mt-4 text-slate-600 max-w-xl mx-auto text-base md:text-lg">
               Choose the room that fits your budget and lifestyle. No hidden fees, no brokerage.
             </p>
-          </motion.div>
+          </Motion.div>
         </div>
       </section>
 
@@ -65,7 +64,7 @@ export default function Rooms() {
           >
             {rooms.length > 0 ? (
               rooms.map((room) => (
-                <motion.article
+                <Motion.article
                   key={room._id}
                   variants={fadeUp}
                   className="card-hover group relative overflow-hidden rounded-2xl bg-white shadow-md ring-2 ring-slate-100"
@@ -91,7 +90,7 @@ export default function Rooms() {
 
                   <div className="p-6">
                     <h2 className="text-xl font-bold text-slate-900 mb-2">{room.title}</h2>
-                    <p className="text-sm text-slate-500 mb-4 line-clamp-2">{room.description || "Clean, comfortable room with all basic amenities included."}</p>
+                    <p className="text-sm text-slate-500 mb-4 leading-relaxed font-bold whitespace-pre-line">{room.description || "Clean, comfortable room with all basic amenities included."}</p>
                     <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-6 uppercase tracking-wider">
                         <span>Capacity: {room.capacity}</span>
                         <span className={room.availableBeds === 0 ? "text-red-500" : "text-green-600"}>
@@ -106,7 +105,7 @@ export default function Rooms() {
                       Book This Room <FiArrowRight />
                     </a>
                   </div>
-                </motion.article>
+                </Motion.article>
               ))
             ) : (
               <div className="col-span-3 text-center py-20 grayscale opacity-50">
@@ -118,7 +117,7 @@ export default function Rooms() {
 
         {/* CTA note */}
         {!loading && rooms.length > 0 && (
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -132,7 +131,7 @@ export default function Rooms() {
               </Link>{" "}
               and we'll help you find the perfect fit.
             </p>
-          </motion.div>
+          </Motion.div>
         )}
       </section>
     </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import {motion, AnimatePresence } from "framer-motion";
+import {motion as Motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX, FiBell } from "react-icons/fi";
 import { MdHotel } from "react-icons/md";
 import axios from "axios";
@@ -62,7 +62,7 @@ export default function Navbar() {
       {/* Hot Section / Announcement Bar */}
       <AnimatePresence>
         {settings?.showAnnouncement && settings?.announcement && (
-          <motion.div
+          <Motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -73,11 +73,11 @@ export default function Navbar() {
                <span className="uppercase">{settings.announcement}</span>
                <FiBell className="animate-bounce" />
             </div>
-          </motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
 
-      <motion.header
+      <Motion.header
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -106,15 +106,6 @@ export default function Navbar() {
             <div className="relative group">
               <NavLink to="/rooms" className={linkClass}>Rooms</NavLink>
               <div className="absolute top-full left-0 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 mt-2 z-100 opacity-0 group-hover:opacity-100 invisible group:visible transition-all">
-                {rooms.map(room => (
-                  <Link 
-                    key={room._id}
-                    to={`/rooms#${room._id}`}
-                    className="block px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-all"
-                  >
-                    {room.title}
-                  </Link>
-                ))}
               </div>
             </div>
 
@@ -137,13 +128,13 @@ export default function Navbar() {
           >
             <AnimatePresence mode="wait" initial={false}>
               {mobileOpen ? (
-                <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                <Motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
                   <FiX size={18} />
-                </motion.span>
+                </Motion.span>
               ) : (
-                <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                <Motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
                   <FiMenu size={18} />
-                </motion.span>
+                </Motion.span>
               )}
             </AnimatePresence>
           </button>
@@ -152,7 +143,7 @@ export default function Navbar() {
         {/* Mobile Menu */}
         <AnimatePresence>
           {mobileOpen && (
-            <motion.div
+            <Motion.div
               key="mobile-menu"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
@@ -187,10 +178,10 @@ export default function Navbar() {
                   Book Now
                 </a>
               </div>
-            </motion.div>
+            </Motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </Motion.header>
     </>
   );
 }

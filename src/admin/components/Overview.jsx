@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import { FiTrendingUp, FiCheckCircle, FiClock, FiXCircle } from "react-icons/fi";
 
 export default function Overview({ data }) {
@@ -14,7 +14,7 @@ export default function Overview({ data }) {
     <div className="space-y-8 p-1">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (
-          <motion.div
+          <Motion.div
             key={i}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -28,7 +28,7 @@ export default function Overview({ data }) {
               <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">{stat.label}</p>
               <h4 className="text-2xl font-black text-slate-800">{stat.value}</h4>
             </div>
-          </motion.div>
+          </Motion.div>
         ))}
       </div>
 

@@ -17,7 +17,7 @@ import { FiMenu } from "react-icons/fi";
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [data, setData] = useState({ rooms: [], bookings: [], gallery: [] });
+  const [data, setData] = useState({ rooms: [], bookings: [], gallery: [], messages: [] });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -26,12 +26,18 @@ export default function AdminDashboard() {
     setLoading(true);
     try {
       const h = { Authorization: `Bearer ${localStorage.getItem("token")}` };
-      const [r, b, g] = await Promise.all([
+      const [r, b, g, m] = await Promise.all([
         axios.get(`${API_URL}/api/rooms`),
         axios.get(`${API_URL}/api/bookings`, { headers: h }),
-        axios.get(`${API_URL}/api/gallery`)
+        axios.get(`${API_URL}/api/gallery`),
+        axios.get(`${API_URL}/api/contact`, { headers: h })
       ]);
-      setData({ rooms: r.data, bookings: b.data, gallery: g.data });
+      setData({ 
+        rooms: Array.isArray(r.data) ? r.data : [], 
+        bookings: Array.isArray(b.data) ? b.data : [], 
+        gallery: Array.isArray(g.data) ? g.data : [],
+        messages: Array.isArray(m.data) ? m.data : []
+      });
     } catch (err) {
       if (err.response?.status === 401) {
         navigate("/admin/login");
@@ -103,7 +109,7 @@ export default function AdminDashboard() {
             {activeTab === "rooms" && <RoomsTab rooms={data.rooms} fetchData={fetchData} />}
             {activeTab === "bookings" && <BookingsTab bookings={data.bookings} fetchData={fetchData} />}
             {activeTab === "gallery" && <GalleryTab gallery={data.gallery} fetchData={fetchData} />}
-            {activeTab === "messages" && <MessagesTab fetchData={fetchData} />}
+            {activeTab === "messages" && <MessagesTab messages={data.messages} fetchData={fetchData} />}
             {activeTab === "settings" && <SettingsTab />}
           </Motion.div>
         </AnimatePresence>

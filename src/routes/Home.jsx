@@ -1,7 +1,7 @@
 /* Redacted: Updating Home.jsx to fetch real rooms from backend */
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
-import { motion, AnimatePresence, useInView, useMotionValue, useSpring } from "framer-motion";
+import { motion as Motion, AnimatePresence, useInView, useMotionValue, useSpring } from "framer-motion";
 import API_URL from "../api";
 import axios from "axios";
 import {
@@ -159,7 +159,7 @@ export default function Home() {
     <div className="overflow-x-hidden">
       <AnimatePresence>
         {toast && (
-          <motion.div
+          <Motion.div
             key="toast"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -167,7 +167,7 @@ export default function Home() {
             className={`toast ${toast.type === "success" ? "toast-success" : "toast-error"}`}
           >
             {toast.msg}
-          </motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
 
@@ -176,7 +176,7 @@ export default function Home() {
         <div className="absolute bottom-20 left-20 w-[400px] h-[400px] rounded-full opacity-20 bg-purple-400 blur-3xl" />
 
         <div className="relative z-10 mx-auto max-w-6xl px-4 py-16 grid gap-12 md:grid-cols-2 md:items-center">
-          <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}>
+          <Motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}>
             <div className="badge badge-blue mb-5">
               <FiStar size={12} style={{ color: "#f59e0b" }} /> Trusted by 500+ Students in Greater Noida
             </div>
@@ -191,9 +191,9 @@ export default function Home() {
               <a href="#booking-form" className="btn-primary">Book Now <FiArrowRight /></a>
               <a href="/rooms" className="btn-secondary">View Rooms</a>
             </div>
-          </motion.div>
+          </Motion.div>
 
-          <motion.div initial={{ opacity: 0, x: 50, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 0.7 }} className="relative">
+          <Motion.div initial={{ opacity: 0, x: 50, scale: 0.95 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ duration: 0.7 }} className="relative">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=1200&q=80" className="w-full h-[420px] object-cover" alt="Hostel Room" />
               <div className="absolute bottom-5 left-5 glass-card rounded-2xl px-4 py-3 shadow-xl">
@@ -201,7 +201,7 @@ export default function Home() {
                 <p className="text-xl font-extrabold text-blue-700">₹5,000 / month</p>
               </div>
             </div>
-          </motion.div>
+          </Motion.div>
         </div>
       </section>
 
@@ -281,7 +281,7 @@ export default function Home() {
         ) : (
             <div className="grid gap-6 md:grid-cols-3">
             {rooms.length > 0 ? rooms.slice(0, 3).map((room, i) => (
-                <motion.article key={room._id} variants={fadeUp} className="card-hover group relative overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-100">
+                <Motion.article key={room._id} variants={fadeUp} className="card-hover group relative overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-100">
                 <div className="relative h-52 overflow-hidden">
                     <img src={room.images?.[0] || "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80"} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                     <div className="absolute top-3 left-3 text-xs font-bold text-white px-3 py-1 rounded-full bg-blue-600">{room.tag || "Available"}</div>
@@ -292,7 +292,7 @@ export default function Home() {
                     <p className="text-sm text-slate-500 mb-4 line-clamp-2">{room.description || "Fully furnished and comfortable rooms with high-speed Wi-Fi and security."}</p>
                     <button onClick={() => scrollToBooking(room.title)} className="btn-primary w-full justify-center text-sm py-2.5 rounded-xl block text-center">Book Now</button>
                 </div>
-                </motion.article>
+                </Motion.article>
             )) : (
                 <p className="text-center col-span-3 text-slate-400">Loading catalog...</p>
             )}
@@ -313,9 +313,9 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {amenities.map(({ icon, label }, i) => (
-              <motion.div key={label} variants={fadeUp} className="amenity-box">
+              <Motion.div key={label} variants={fadeUp} className="amenity-box">
                 <div className="text-blue-600">{icon}</div><p className="text-sm font-semibold text-slate-700">{label}</p>
-              </motion.div>
+              </Motion.div>
             ))}
           </div>
         </Section>
@@ -331,7 +331,7 @@ export default function Home() {
             </div>
             <div className="grid gap-6 md:grid-cols-3">
               {rooms.slice(3).map((room, i) => (
-                <motion.article key={room._id} variants={fadeUp} className="card-hover group relative overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-100">
+                <Motion.article key={room._id} variants={fadeUp} className="card-hover group relative overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-slate-100">
                   <div className="relative h-52 overflow-hidden">
                     <img src={room.images?.[0] || "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80"} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                     <div className="absolute top-3 left-3 text-xs font-bold text-white px-3 py-1 rounded-full bg-purple-600">{room.tag || "Available"}</div>
@@ -342,7 +342,7 @@ export default function Home() {
                     <p className="text-sm text-slate-500 mb-4 line-clamp-2">{room.description || "Quality living space at affordable prices."}</p>
                     <button onClick={() => scrollToBooking(room.title)} className="btn-secondary w-full justify-center text-sm py-2.5 rounded-xl block text-center">Book Now</button>
                   </div>
-                </motion.article>
+                </Motion.article>
               ))}
             </div>
           </Section>

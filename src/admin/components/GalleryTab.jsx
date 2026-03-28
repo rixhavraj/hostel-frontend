@@ -19,14 +19,21 @@ export default function GalleryTab({ gallery, fetchData }) {
      setLoading(true);
      try {
        const token = localStorage.getItem("token");
+       if (!token) {
+         alert("Session expired. Please login again.");
+         return;
+       }
        await axios.post(`${API_URL}/api/gallery`, formData, {
-         headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` }
+         headers: { Authorization: `Bearer ${token}` }
        });
        fetchData();
      } catch (err) {
-       alert("Error uploading to gallery");
+       const msg = err.response?.data?.error || err.response?.data?.message || err.message;
+       alert(`Error uploading to gallery: ${msg}`);
+       console.log("upload error", err);
      } finally {
        setLoading(false);
+       e.target.value = "";
      }
   };
 
@@ -37,19 +44,19 @@ export default function GalleryTab({ gallery, fetchData }) {
       await axios.delete(`${API_URL}/api/gallery/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       fetchData();
     } catch (err) {
-      alert("Error deleting photo");
+      alert("Error deleting photo", err);
     }
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center bg-white/60 backdrop-blur-md p-6 rounded-[2rem] border border-white shadow-xl shadow-slate-200/50">
+      <div className="flex justify-between items-center bg-white/60 backdrop-blur-md p-6 rounded-4xl border border-white shadow-xl shadow-slate-200/50">
         <div>
           <h2 className="text-2xl font-black text-slate-800">Lifestyle Gallery</h2>
           <p className="text-slate-500 text-sm">Showcase the hostel experience</p>
         </div>
         <div className="relative">
-          <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleUpload} disabled={loading} />
+          <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleUpload} disabled={loading} />
           <button className="btn-primary" disabled={loading}>
             <FiPlus /> {loading ? 'Uploading...' : 'Add Photo'}
           </button>
@@ -58,7 +65,7 @@ export default function GalleryTab({ gallery, fetchData }) {
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {gallery.map((img) => (
-          <div key={img._id} className="aspect-square rounded-[2rem] border border-white overflow-hidden shadow-lg relative group">
+          <div key={img._id} className="aspect-square rounded-4xl border border-white overflow-hidden shadow-lg relative group">
             <img src={img.url} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="" />
             <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4 text-center">
                <p className="text-white text-[10px] font-bold mb-2 uppercase tracking-widest">{img.caption}</p>

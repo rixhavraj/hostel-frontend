@@ -3,17 +3,23 @@ import axios from "axios";
 import { FiMail, FiMessageSquare, FiTrash2, FiClock, FiUser, FiCheckCircle } from "react-icons/fi";
 import API_URL from "../../api";
 
-export default function MessagesTab() {
-  const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function MessagesTab({ messages: propMessages, fetchData }) {
+  const [internalMessages, setInternalMessages] = useState([]);
+  const [loading, setLoading] = useState(!propMessages);
+
+  const messages = propMessages || internalMessages;
 
   const fetchMessages = async () => {
+    if (fetchData) {
+       await fetchData();
+       return;
+    }
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(`${API_URL}/api/contact`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setMessages(res.data);
+      setInternalMessages(res.data);
     } catch (err) {
       console.error("Error fetching messages:", err);
     } finally {
@@ -22,8 +28,9 @@ export default function MessagesTab() {
   };
 
   useEffect(() => {
-    fetchMessages();
-  }, []);
+    if (!propMessages) fetchMessages();
+    else setLoading(false);
+  }, [propMessages]);
 
   const deleteMessage = async (id) => {
     if (!window.confirm("Are you sure you want to delete this message?")) return;

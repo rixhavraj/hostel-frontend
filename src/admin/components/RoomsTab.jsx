@@ -46,7 +46,7 @@ export default function RoomsTab({ rooms, fetchData }) {
       await axios.delete(`${API_URL}/api/rooms/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       fetchData();
     } catch (err) {
-      alert("Error deleting room");
+      alert("Error deleting room", err);
     }
   };
 
@@ -71,12 +71,18 @@ export default function RoomsTab({ rooms, fetchData }) {
     formData.append("image", file);
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Session expired. Please login again.");
+        return;
+      }
       await axios.post(`${API_URL}/api/rooms/${roomId}/upload-image`, formData, {
-        headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();
     } catch (err) {
-      alert("Error uploading image");
+      alert("Error uploading image: " + (err.response?.data?.error || err.response?.data?.message || err.message));
+    } finally {
+      e.target.value = "";
     }
   };
 
@@ -107,12 +113,12 @@ export default function RoomsTab({ rooms, fetchData }) {
               <div className="absolute top-4 left-4"><span className="badge badge-blue">{room.tag}</span></div>
             </div>
             
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
+            <div className="p-6 flex flex-col h-fit shadow-sm ">
+              <div className="flex justify-between items-start mb-4 flex flex-col flex-grow">
                 <h4 className="text-lg font-black text-slate-800">{room.title}</h4>
                 <p className="text-blue-600 font-black">₹{room.price}</p>
               </div>
-              <p className="text-slate-500 text-xs mb-6 line-clamp-2">{room.description}</p>
+              <p className="text-slate-500 text-xs mb-6 leading-relaxed font-bold whitespace-pre-line">{room.description}</p>
               
               {/* Thumbnail strip */}
               {room.images?.length > 0 && (

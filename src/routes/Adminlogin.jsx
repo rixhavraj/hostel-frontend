@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-{/*import { motion } from "framer-motion";*/}
+import { motion as Motion } from "framer-motion";
 import { FiMail, FiLock, FiArrowRight, FiShield } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../api";
@@ -37,7 +37,7 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4 hero-bg">
-      <motion.div
+      <Motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-md"
@@ -53,13 +53,13 @@ export default function AdminLogin() {
 
           <form onSubmit={handleLogin} className="p-8 space-y-6">
             {error && (
-              <motion.div
+              <Motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-red-50 text-red-600 p-3 rounded-xl text-xs font-bold text-center border border-red-100"
               >
                 {error}
-              </motion.div>
+              </Motion.div>
             )}
 
             <div className="space-y-4">
@@ -120,7 +120,7 @@ export default function AdminLogin() {
         <p className="text-center mt-8 text-slate-400 text-sm">
           &copy; 2024 A1 Hostel Management System
         </p>
-      </motion.div>
+      </Motion.div>
     </div>
   );
 }

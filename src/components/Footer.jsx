@@ -135,7 +135,7 @@ export default function Footer() {
               rel="noreferrer"
               className="text-blue-500 hover:underline font-medium"
             >
-              Rixhav
+              Rishav
             </a>
           </p>
         </div>
