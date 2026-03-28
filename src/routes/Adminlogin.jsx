@@ -5,6 +5,8 @@ import { FiMail, FiLock, FiArrowRight, FiShield } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../api";
 
+const AUTH_API_BASE = API_URL || import.meta.env.VITE_API_URL0 || "http://localhost:5000";
+
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,14 +24,20 @@ export default function AdminLogin() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post(`${API_URL}/api/auth/login`, {
+      const res = await axios.post(`${AUTH_API_BASE}/api/auth/login`, {
         email,
         password,
       });
       localStorage.setItem("token", res.data.token);
       navigate("/admin");
     } catch (err) {
-      setError("Invalid admin credentials. Please try again.", err);
+      if (!err.response) {
+        setError("Network error: Cannot connect to the server. Check if the backend is running.");
+      } else if (err.response.status === 401 || err.response.status === 400) {
+        setError("Invalid admin credentials. Please try again.");
+      } else {
+        setError(`Server error (${err.response.status}). Please try again later.`);
+      }
     } finally {
       setLoading(false);
     }
@@ -72,7 +80,7 @@ export default function AdminLogin() {
                     required
                     className="input-field py-3"
                     style={{ paddingLeft: "2.75rem" }}
-                    placeholder="admin@rphhostel.com"
+                    placeholder="admin email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />

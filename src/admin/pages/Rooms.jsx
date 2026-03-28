@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../../../../admin/src/components/Sidebar";
 import axios from "axios";
+import API_URL from "../../api";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 export default function Rooms() {
   const [rooms, setRooms] = useState([]);
 
