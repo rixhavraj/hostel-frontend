@@ -79,7 +79,7 @@ function Section({ children, className = "", ...props }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   return (
-    <motion.section
+    <Motion.section
       ref={ref}
       initial="hidden"
       animate={inView ? "show" : "hidden"}
@@ -88,7 +88,7 @@ function Section({ children, className = "", ...props }) {
       {...props}
     >
       {children}
-    </motion.section>
+    </Motion.section>
   );
 }
 
