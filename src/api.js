@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.MODE === "development" 
+const API_URL = import.meta.env.VITE_API_UR !== "development" 
   ? import.meta.env.VITE_API_URL0 || "http://localhost:5000" 
   : import.meta.env.VITE_API_URL;
 
