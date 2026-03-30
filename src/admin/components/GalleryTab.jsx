@@ -42,9 +42,10 @@ export default function GalleryTab({ gallery, fetchData }) {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(`${API_URL}/api/gallery/${id}`, { headers: { Authorization: `Bearer ${token}` } });
-      fetchData();
+      await fetchData();
     } catch (err) {
-      alert("Error deleting photo", err);
+      const msg = err.response?.data?.error || err.response?.data?.message || err.message;
+      alert(`Error deleting photo: ${msg}`);
     }
   };
 

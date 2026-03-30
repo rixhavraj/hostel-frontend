@@ -56,9 +56,9 @@ export default function RoomsTab({ rooms, fetchData }) {
       const token = localStorage.getItem("token");
       await axios.delete(`${API_URL}/api/rooms/${roomId}/image`, {
         headers: { Authorization: `Bearer ${token}` },
-        data: { imageUrl }
+        params: { imageUrl }
       });
-      fetchData();
+      await fetchData();
     } catch (err) {
       alert("Error deleting image: " + (err.response?.data?.error || err.message));
     }
