@@ -76,7 +76,7 @@ export default function Rooms() {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                     {room.tag && (
                       <span className="absolute top-3 left-3 text-xs font-bold text-white px-3 py-1 rounded-full bg-blue-600 shadow">
                         {room.tag}

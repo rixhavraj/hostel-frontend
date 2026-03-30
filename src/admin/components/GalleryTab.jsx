@@ -1,10 +1,11 @@
 import { FiPlus, FiTrash2, FiImage, FiX } from "react-icons/fi";
 import API_URL from "../../api";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function GalleryTab({ gallery, fetchData }) {
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const handleUpload = async (e) => {
      const file = e.target.files[0];
@@ -21,19 +22,28 @@ export default function GalleryTab({ gallery, fetchData }) {
        const token = localStorage.getItem("token");
        if (!token) {
          alert("Session expired. Please login again.");
+         setLoading(false);
+         if (fileInputRef.current) fileInputRef.current.value = "";
          return;
        }
+
        await axios.post(`${API_URL}/api/gallery`, formData, {
-         headers: { Authorization: `Bearer ${token}` }
+         headers: {
+           Authorization: `Bearer ${token}`,
+           // do NOT set Content-Type manually here, browser includes boundary automatically
+         },
        });
-       fetchData();
+
+       await fetchData();
      } catch (err) {
-       const msg = err.response?.data?.error || err.response?.data?.message || err.message;
-       alert(`Error uploading to gallery: ${msg}`);
-       console.log("upload error", err);
+       const serverPayload = err.response?.data;
+       const msg = err.response?.data?.error || err.response?.data?.message || JSON.stringify(serverPayload) || err.message;
+       alert(`Error uploading to gallery (status ${err.response?.status || "n/a"}): ${msg}`);
+       console.error("upload error", err);
      } finally {
        setLoading(false);
-       e.target.value = "";
+       if (fileInputRef.current) fileInputRef.current.value = "";
+       else e.target.value = "";
      }
   };
 
@@ -57,7 +67,14 @@ export default function GalleryTab({ gallery, fetchData }) {
           <p className="text-slate-500 text-sm">Showcase the hostel experience</p>
         </div>
         <div className="relative">
-          <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleUpload} disabled={loading} />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="absolute inset-0 opacity-0 cursor-pointer"
+            onChange={handleUpload}
+            disabled={loading}
+          />
           <button className="btn-primary" disabled={loading}>
             <FiPlus /> {loading ? 'Uploading...' : 'Add Photo'}
           </button>
