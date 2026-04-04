@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import { FiMaximize2, FiX, FiCalendar, FiImage } from "react-icons/fi";
 import API_URL from "../api";
 
@@ -32,21 +32,21 @@ export default function Gallery() {
     <div className="min-h-screen bg-slate-50 py-16 px-4">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-12">
-          <motion.h1
+          <Motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl font-extrabold text-slate-900"
           >
             Hostel <span className="gradient-text">Lifestyle</span>
-          </motion.h1>
-          <motion.p
+          </Motion.h1>
+          <Motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="mt-4 text-slate-600 max-w-lg mx-auto"
           >
             Take a look at our facilities, events, and the vibrant life of our residents.
-          </motion.p>
+          </Motion.p>
         </header>
 
         {loading ? (
@@ -54,7 +54,7 @@ export default function Gallery() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
           </div>
         ) : (
-          <motion.div
+          <Motion.div
             variants={{
               show: {
                 transition: {
@@ -67,7 +67,7 @@ export default function Gallery() {
             className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4"
           >
             {images.map((img) => (
-              <motion.div
+              <Motion.div
                 key={img._id}
                 variants={fadeUp}
                 className="relative group overflow-hidden rounded-2xl bg-white shadow-md cursor-pointer break-inside-avoid"
@@ -84,9 +84,9 @@ export default function Gallery() {
                     <p className="text-white font-medium text-sm">{img.caption}</p>
                   )}
                 </div>
-              </motion.div>
+              </Motion.div>
             ))}
-          </motion.div>
+          </Motion.div>
         )}
 
         {!loading && images.length === 0 && (
@@ -99,7 +99,7 @@ export default function Gallery() {
       {/* Lightbox Modal */}
       <AnimatePresence>
         {selectedImg && (
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -112,7 +112,7 @@ export default function Gallery() {
             >
               <FiX size={32} />
             </button>
-            <motion.div
+            <Motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
@@ -129,8 +129,8 @@ export default function Gallery() {
                   {selectedImg.caption}
                 </p>
               )}
-            </motion.div>
-          </motion.div>
+            </Motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
     </div>
