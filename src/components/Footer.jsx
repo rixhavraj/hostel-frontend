@@ -129,7 +129,7 @@ export default function Footer() {
           <p>© {YEAR} A1 Hostel. All rights reserved.</p>
           <p>
             Designed &amp; built by{" "}
-            <a href="rixhavraj.github.io/portfolio/" target="_blank" rel="noreferrer"
+            <a href="https://rixhavraj.github.io/portfolio/" target="_blank" rel="noreferrer"
               className="font-bold transition-colors hover:text-indigo-400" style={{ color: "rgba(129,140,248,0.8)" }}>
               Rishav
             </a>

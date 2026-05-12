@@ -8,6 +8,7 @@ import Contact from "./routes/Contacts.jsx";
 import AdminDashboard from "./routes/AdminDashboard.jsx";
 import AdminLogin from "./routes/Adminlogin.jsx";
 import PrivateRoute from "./admin/utils/privateRoute.jsx";
+import NotFound from "./routes/NotFound.jsx";
 
 export default function App() {
   const location = useLocation();
@@ -35,7 +36,7 @@ export default function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/contact" element={<Contact />} />
           
-          <Route path="*" element={<h1 className="text-center mt-20 text-3xl font-bold text-slate-400">404 - Page Not Found</h1>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       {!isAdminPath && <Footer />}
