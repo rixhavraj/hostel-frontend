@@ -3,6 +3,8 @@ import { motion as M, useInView } from "framer-motion";
 import { useRef } from "react";
 import { FiInstagram, FiFacebook, FiMail, FiPhone, FiMapPin, FiArrowRight } from "react-icons/fi";
 import { MdHotel } from "react-icons/md";
+import Snowfall from "./Snowfall";
+import footerVideo from "../assets/6310-190925747.mp4";
 
 const YEAR = new Date().getFullYear();
 
@@ -25,23 +27,36 @@ export default function Footer() {
   const inView = useInView(ref, { once: true });
 
   return (
-    <footer style={{ background: "#06060e" }}>
+    <footer className="relative overflow-hidden" style={{ background: "#06060e" }}>
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        style={{ mixBlendMode: "screen", opacity: 0.35, filter: "contrast(1.2)" }}
+      >
+        <source src={footerVideo} type="video/mp4" />
+      </video>
+      
+      <Snowfall count={25} />
       {/* CTA band */}
-      <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c026d3 100%)" }}>
-        {/* shimmer stripe */}
-        <div className="absolute inset-0 opacity-20"
-          style={{ backgroundImage: "repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,.05) 10px,rgba(255,255,255,.05) 20px)" }} />
-        <div className="relative mx-auto max-w-6xl px-4 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <h2 className="text-3xl font-black text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>Ready to move in?</h2>
-            <p className="text-white/60 text-sm mt-1">Book your room today — limited seats available!</p>
+      <div className="relative overflow-hidden py-16">
+        <div className="relative mx-auto max-w-6xl px-4 flex flex-col md:flex-row items-center justify-between gap-8 z-10">
+          <div className="text-center md:text-left">
+            <h2 className="text-4xl font-black text-white tracking-tight" style={{ fontFamily: "'Outfit', sans-serif" }}>
+              Ready to move in?
+            </h2>
+            <p className="text-white/50 text-base mt-2 font-medium">Book your room today — limited seats available!</p>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <a href="/#booking-form" className="btn-primary" style={{ background: "white", color: "#4f46e5" }}>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href="/#booking-form" className="btn-primary px-8 py-4 text-base" style={{ background: "white", color: "black" }}>
               Book Now <FiArrowRight />
             </a>
             <a href="https://wa.me/919708169442" target="_blank" rel="noreferrer"
-              className="flex items-center gap-2 px-5 py-3 rounded-2xl border-2 border-white/30 text-white text-sm font-bold hover:bg-white/10 transition-colors">
+              className="flex items-center gap-2 px-6 py-4 rounded-2xl border-2 border-white/20 text-white text-base font-bold hover:bg-white/10 transition-all">
               WhatsApp Us
             </a>
           </div>
@@ -54,7 +69,7 @@ export default function Footer() {
         initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
-        className="mx-auto max-w-6xl px-4 py-14"
+        className="relative z-10 mx-auto max-w-6xl px-4 py-14"
       >
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rph-hostel.in/sitemap.xml

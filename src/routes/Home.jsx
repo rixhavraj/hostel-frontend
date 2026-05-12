@@ -19,6 +19,7 @@ import {
   MdOutlineFoodBank, MdOutlineSecurity,
 } from "react-icons/md";
 import AnimatedBg from "../components/AnimatedBg";
+import Snowfall from "../components/Snowfall";
 
 /* ── helpers ── */
 const fadeUp = { hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0 } };
@@ -151,6 +152,7 @@ export default function Home() {
       ══════════════════════════════════════ */}
       <section className="hero-bg relative min-h-[100dvh] flex flex-col items-center justify-between overflow-hidden">
         <AnimatedBg />
+        <Snowfall count={30} />
 
         <div className="relative z-10 mx-auto max-w-6xl px-4 pt-32 pb-12 text-center flex-1 flex flex-col justify-center">
           <M.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -225,8 +227,8 @@ export default function Home() {
       {/* ══════════════════════════════════════
           STATS SECTION
       ══════════════════════════════════════ */}
-      <section className="section-dark py-24 border-b border-white/5">
-        <div className="mx-auto max-w-6xl px-4">
+      <section className="section-dark relative overflow-hidden py-24 border-b border-white/5">
+        <div className="mx-auto max-w-6xl px-4 relative z-10">
           <Section className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
             {[
               { target: 500, suffix: "+", label: "Happy Residents" },

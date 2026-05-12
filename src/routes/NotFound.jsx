@@ -1,11 +1,13 @@
 import { motion as M } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FiWifiOff, FiHome } from "react-icons/fi";
+import Snowfall from "../components/Snowfall";
 
 export default function NotFound() {
   return (
     <div className="min-h-[100dvh] section-dark flex flex-col items-center justify-center relative overflow-hidden px-4 pt-20">
       {/* Background elements */}
+      <Snowfall count={25} />
       <div className="absolute inset-0 top-0 h-full z-0 overflow-hidden pointer-events-none">
          <div className="orb orb-1" style={{ top: '20%', left: '10%', opacity: 0.15 }} />
          <div className="orb orb-2" style={{ bottom: '20%', right: '10%', opacity: 0.1 }} />

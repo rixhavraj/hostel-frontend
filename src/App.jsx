@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -9,17 +10,26 @@ import AdminDashboard from "./routes/AdminDashboard.jsx";
 import AdminLogin from "./routes/Adminlogin.jsx";
 import PrivateRoute from "./admin/utils/privateRoute.jsx";
 import NotFound from "./routes/NotFound.jsx";
+import ServerLoader from "./components/ServerLoader.jsx";
 
 export default function App() {
   const location = useLocation();
   const isAdminPath = location.pathname.startsWith("/admin");
 
+  useEffect(() => {
+    // Only scroll to top if there isn't a hash in the URL (like #booking-form)
+    if (!location.hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
+  }, [location.pathname, location.hash]);
+
   return (
     <div className="min-h-screen flex flex-col">
       {!isAdminPath && <Navbar />}
       <main className="flex-1">
-        <Routes>
-          {/* Admin Routes */}
+        <ServerLoader>
+          <Routes>
+            {/* Admin Routes */}
           <Route
             path="/admin"
             element={
@@ -37,7 +47,8 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Routes>
+        </ServerLoader>
       </main>
       {!isAdminPath && <Footer />}
     </div>
