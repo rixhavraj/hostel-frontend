@@ -85,7 +85,7 @@ export default function BookingsTab({ bookings, fetchData }) {
       <div className="hidden lg:block overflow-x-auto">
         <table className="w-full border-separate border-spacing-y-4">
           <thead>
-            <tr className="text-left text-slate-400 text-[10px] font-black uppercase tracking-widest">
+            <tr className="text-left text-white text-[10px] font-black uppercase tracking-widest">
               <th className="px-6">Student Details</th>
               <th className="px-6">Room Type</th>
               <th className="px-6">Move-in Date</th>

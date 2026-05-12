@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import {motion as Motion, AnimatePresence } from "framer-motion";
-import { FiMenu, FiX, FiBell } from "react-icons/fi";
+import { motion as M, AnimatePresence } from "framer-motion";
+import { FiMenu, FiX, FiBell, FiArrowRight } from "react-icons/fi";
 import { MdHotel } from "react-icons/md";
 import axios from "axios";
 import API_URL from "../api";
@@ -11,130 +11,99 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [settings, setSettings] = useState(null);
   const [rooms, setRooms] = useState([]);
- {/* const [dropdownOpen, setDropdownOpen] = useState(false);*/}
   const location = useLocation();
+  const isHome = location.pathname === "/";
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    const fetchSettings = async () => {
+    const load = async () => {
       try {
-        const res = await axios.get(`${API_URL}/api/settings`);
-        setSettings(res.data);
-      } catch (err) {
-        console.error("Error fetching settings:", err);
-      }
+        const [s, r] = await Promise.all([
+          axios.get(`${API_URL}/api/settings`),
+          axios.get(`${API_URL}/api/rooms`),
+        ]);
+        setSettings(s.data);
+        setRooms(r.data);
+      } catch {}
     };
-
-    const fetchRooms = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/api/rooms`);
-        setRooms(res.data);
-      } catch (err) {
-        console.error("Error fetching rooms:", err);
-      }
-    };
-    fetchSettings();
-    fetchRooms();
-    // Refresh every 30 seconds for "instant" updates feel
-    const interval = setInterval(() => {
-        fetchSettings();
-        fetchRooms();
-    }, 30000);
-    return () => clearInterval(interval);
+    load();
+    const id = setInterval(load, 30000);
+    return () => clearInterval(id);
   }, []);
 
-
-
   const linkClass = ({ isActive }) =>
-    `relative px-1 py-1 text-sm font-medium transition-colors duration-200 ${
-      isActive ? "text-blue-600" : "text-slate-700 hover:text-blue-600"
-    }`;
-
-  const isHome = location.pathname === "/";
+    `nav-link ${isActive ? "active" : ""}`;
 
   return (
     <>
-      {/* Hot Section / Announcement Bar */}
+      {/* Announcement bar */}
       <AnimatePresence>
         {settings?.showAnnouncement && settings?.announcement && (
-          <Motion.div
+          <M.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="bg-blue-600 text-white py-2 px-4 text-center text-[11px] md:text-xs font-bold tracking-wide relative z-60"
+            className="relative z-50 overflow-hidden"
+            style={{ background: "linear-gradient(90deg, #6366f1 0%, #ec4899 100%)" }}
           >
-            <div className="flex items-center justify-center gap-2 overflow-hidden whitespace-nowrap">
-               <FiBell className="animate-bounce" />
-               <span className="uppercase">{settings.announcement}</span>
-               <FiBell className="animate-bounce" />
+            <div className="flex items-center justify-center gap-2 py-2 px-4 text-white text-xs font-bold tracking-wide whitespace-nowrap overflow-hidden">
+              <FiBell className="animate-bounce flex-shrink-0" size={12} />
+              <span className="uppercase">{settings.announcement}</span>
+              <FiBell className="animate-bounce flex-shrink-0" size={12} />
             </div>
-          </Motion.div>
+          </M.div>
         )}
       </AnimatePresence>
 
-      <Motion.header
+      <M.header
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className={`sticky top-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg shadow-slate-200/50"
-            : "bg-white/80 backdrop-blur-sm"
-        }`}
+        className={`navbar ${scrolled ? "navbar-scrolled" : "navbar-top"}`}
       >
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-blue-600 text-white shadow-md shadow-blue-200 group-hover:scale-110 transition-transform duration-200">
-              <MdHotel size={20} />
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl text-white shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+              style={{ background: "linear-gradient(135deg, #6366f1, #ec4899)" }}>
+              <MdHotel size={22} />
             </div>
-            <span className="text-lg font-bold tracking-tight text-slate-900">
-              A1 <span className="text-blue-600">Hostel</span>
+            <span className="text-xl font-black text-white tracking-tight" style={{ fontFamily: "'Outfit', sans-serif" }}>
+              A1 <span style={{ background: "linear-gradient(135deg, #818cf8, #ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Hostel</span>
             </span>
           </Link>
 
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-8">
             <NavLink to="/" end className={linkClass}>Home</NavLink>
-            
-            {/* Rooms Dropdown */}
-            <div className="relative group">
-              <NavLink to="/rooms" className={linkClass}>Rooms</NavLink>
-              <div className="absolute top-full left-0 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 mt-2 z-100 opacity-0 group-hover:opacity-100 invisible group:visible transition-all">
-              </div>
-            </div>
-
+            <NavLink to="/rooms" className={linkClass}>Rooms</NavLink>
             <NavLink to="/gallery" className={linkClass}>Gallery</NavLink>
             <NavLink to="/contact" className={linkClass}>Contact</NavLink>
-            
-            <a
-              href={isHome ? "#booking-form" : "/#booking-form"}
-              className="btn-primary text-sm px-5 py-2.5"
-            >
-              Book Now
+            <a href={isHome ? "#booking-form" : "/#booking-form"} className="btn-primary text-sm px-5 py-2.5">
+              Book Now <FiArrowRight size={14} />
             </a>
           </div>
 
           {/* Mobile Toggle */}
           <button
-            className="lg:hidden flex items-center justify-center w-9 h-9 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
+            className="lg:hidden w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-white/70 hover:bg-white/5 transition-all"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle mobile menu"
           >
             <AnimatePresence mode="wait" initial={false}>
               {mobileOpen ? (
-                <Motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                  <FiX size={18} />
-                </Motion.span>
+                <M.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                  <FiX size={20} />
+                </M.span>
               ) : (
-                <Motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                  <FiMenu size={18} />
-                </Motion.span>
+                <M.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                  <FiMenu size={20} />
+                </M.span>
               )}
             </AnimatePresence>
           </button>
@@ -143,45 +112,43 @@ export default function Navbar() {
         {/* Mobile Menu */}
         <AnimatePresence>
           {mobileOpen && (
-            <Motion.div
+            <M.div
               key="mobile-menu"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="lg:hidden overflow-hidden border-t border-slate-100 bg-white"
+              className="lg:hidden overflow-hidden border-t border-white/5"
+              style={{ background: "rgba(6,6,20,0.95)", backdropFilter: "blur(20px)" }}
             >
-              <div className="mx-auto flex max-w-6xl flex-col px-4 py-3 gap-1">
-                <NavLink to="/" end onClick={() => setMobileOpen(false)} className={({ isActive }) => `px-3 py-2.5 rounded-lg text-sm font-medium ${isActive ? "bg-blue-50 text-blue-600" : "text-slate-700"}`}>Home</NavLink>
-                
-                {/* Mobile Rooms Section */}
-                <div className="px-3 py-2">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Our Rooms</p>
-                  <div className="grid grid-cols-1 gap-1 pl-2 border-l-2 border-slate-100">
-                    <Link to="/rooms" onClick={() => setMobileOpen(false)} className="text-sm font-medium py-1.5 text-slate-600">All Rooms</Link>
-                    {rooms.map(room => (
-                      <Link key={room._id} to={`/rooms#${room._id}`} onClick={() => setMobileOpen(false)} className="text-sm py-1.5 text-slate-500 hover:text-blue-600">
-                        {room.title}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                <NavLink to="/gallery" onClick={() => setMobileOpen(false)} className={({ isActive }) => `px-3 py-2.5 rounded-lg text-sm font-medium ${isActive ? "bg-blue-50 text-blue-600" : "text-slate-700"}`}>Gallery</NavLink>
-                <NavLink to="/contact" onClick={() => setMobileOpen(false)} className={({ isActive }) => `px-3 py-2.5 rounded-lg text-sm font-medium ${isActive ? "bg-blue-50 text-blue-600" : "text-slate-700"}`}>Contact</NavLink>
-                
+              <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-1">
+                {[
+                  { to: "/", label: "Home", end: true },
+                  { to: "/rooms", label: "Rooms" },
+                  { to: "/gallery", label: "Gallery" },
+                  { to: "/contact", label: "Contact" },
+                ].map(({ to, label, end }) => (
+                  <NavLink key={to} to={to} end={end}
+                    onClick={() => setMobileOpen(false)}
+                    className={({ isActive }) =>
+                      `px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${isActive ? "bg-indigo-500/20 text-indigo-400" : "text-white/70 hover:text-white hover:bg-white/5"}`
+                    }
+                  >
+                    {label}
+                  </NavLink>
+                ))}
                 <a
                   href={isHome ? "#booking-form" : "/#booking-form"}
                   onClick={() => setMobileOpen(false)}
-                  className="btn-primary mt-4 justify-center py-3"
+                  className="btn-primary mt-3 justify-center py-3"
                 >
-                  Book Now
+                  Book Now <FiArrowRight size={14} />
                 </a>
               </div>
-            </Motion.div>
+            </M.div>
           )}
         </AnimatePresence>
-      </Motion.header>
+      </M.header>
     </>
   );
 }
