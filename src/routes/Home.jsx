@@ -198,16 +198,6 @@ export default function Home() {
             </a>
           </M.div>
 
-          {/* Scroll cue */}
-          <M.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
-            className="mt-16 flex flex-col items-center gap-2 scroll-indicator"
-          >
-            <span className="text-white/30 text-xs font-semibold uppercase tracking-widest">Scroll to explore</span>
-            <div className="w-5 h-8 rounded-full border border-white/20 flex items-start justify-center p-1">
-              <div className="w-1.5 h-2 bg-indigo-400 rounded-full" style={{ animation: "scrollBounce 1.5s ease-in-out infinite" }} />
-            </div>
-          </M.div>
         </div>
 
         {/* Bottom floating cards */}
