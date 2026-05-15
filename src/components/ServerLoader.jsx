@@ -85,7 +85,7 @@ export default function ServerLoader({ children }) {
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 className="text-indigo-400 text-sm md:text-base font-medium"
               >
-                Waking up free-tier backend<br/>(This might take up to 50 seconds)
+                Waking up backend<br/>(This might take up to 50 seconds)
               </motion.p>
             )}
           </AnimatePresence>
