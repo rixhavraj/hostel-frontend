@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
-import { motion as M } from "framer-motion";
-import { FiArrowRight, FiStar } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import API_URL from "../api";
-
-const fadeUp = { hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0 } };
-const scaleIn = { hidden: { opacity: 0, scale: 0.9 }, show: { opacity: 1, scale: 1 } };
+import { FiSearch, FiStar, FiWifi, FiCheckCircle, FiCoffee } from "react-icons/fi";
+import { MdOutlineKingBed } from "react-icons/md";
 
 export default function Rooms() {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -27,120 +25,146 @@ export default function Rooms() {
   }, []);
 
   return (
-    <div className="overflow-x-hidden min-h-screen section-dark pt-32 pb-24 relative">
-      <div className="absolute inset-0 top-0 h-[800px] z-0 overflow-hidden pointer-events-none">
-         <div className="orb orb-1" style={{ top: '10%', left: '-10%', opacity: 0.15 }} />
-      </div>
-
-      {/* Header */}
-      <section className="relative px-4 mb-20 z-10">
-        <div className="mx-auto max-w-6xl text-center flex flex-col items-center">
-          <M.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col items-center"
-          >
-            <span className="badge badge-glow mb-6 inline-flex">
-              <FiStar size={11} className="text-yellow-400" /> Transparent Pricing
-            </span>
-            <h1 className="text-5xl font-black text-white mt-3" style={{ fontFamily: "'Outfit', sans-serif" }}>
-              All <span className="gradient-text">Room Types</span>
-            </h1>
-            <div className="divider mx-auto mt-6" />
-            <p className="mt-6 text-white/60 max-w-xl mx-auto text-lg">
-              Choose the room that fits your budget and lifestyle. No hidden fees, no brokerage.
-            </p>
-          </M.div>
+    <div className="bg-gray-50 min-h-screen pb-20">
+      <div className="container mx-auto pt-8">
+        {/* Breadcrumb */}
+        <div className="text-sm text-gray-500 mb-6 flex gap-2">
+           <span className="hover:text-primary cursor-pointer">Home</span> {'>'} 
+           <span className="hover:text-primary cursor-pointer">Search</span> {'>'} 
+           <span className="text-gray-900 font-medium">All Hostels</span>
         </div>
-      </section>
 
-      {/* Rooms Grid */}
-      <section className="mx-auto max-w-6xl px-4 relative z-10">
-        {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <span className="w-12 h-12 border-4 border-white/10 border-t-indigo-500 rounded-full animate-spin"></span>
+        {/* Header */}
+        <div className="mb-8 flex justify-between items-end">
+           <div>
+             <h1 className="text-3xl font-bold text-secondary mb-2" style={{ fontFamily: "'Outfit', sans-serif" }}>Find Your Perfect Stay</h1>
+             <p className="text-gray-500">{rooms.length} properties available</p>
+           </div>
+           
+           <div className="flex gap-4">
+              <select className="border border-gray-200 rounded-lg px-4 py-2 bg-white text-sm text-gray-700 outline-none">
+                <option>Sort by: Popular</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+              </select>
+           </div>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Sidebar Filters */}
+          <div className="w-full lg:w-1/4">
+             <div className="bg-white border border-gray-200 rounded-2xl p-6 sticky top-24">
+                <div className="flex justify-between items-center mb-6">
+                   <h3 className="font-bold text-gray-900">Filters</h3>
+                   <button className="text-primary text-sm font-semibold">Clear All</button>
+                </div>
+
+                <div className="mb-6">
+                   <h4 className="font-semibold text-gray-800 text-sm mb-3">Location</h4>
+                   <div className="relative">
+                     <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                     <input type="text" placeholder="Search area..." className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm" />
+                   </div>
+                </div>
+
+                <div className="mb-6">
+                   <h4 className="font-semibold text-gray-800 text-sm mb-3">Stay Duration</h4>
+                   <div className="space-y-2">
+                     {["Monthly", "3 Months", "6 Months", "Annual"].map(dur => (
+                       <label key={dur} className="flex items-center gap-3 cursor-pointer">
+                         <input type="checkbox" className="w-4 h-4 rounded text-primary border-gray-300 focus:ring-primary" />
+                         <span className="text-sm text-gray-600">{dur}</span>
+                       </label>
+                     ))}
+                   </div>
+                </div>
+
+                <div className="mb-6">
+                   <h4 className="font-semibold text-gray-800 text-sm mb-3">Room Type</h4>
+                   <div className="space-y-2">
+                     {["Single Sharing", "Double Sharing", "Triple Sharing"].map(type => (
+                       <label key={type} className="flex items-center gap-3 cursor-pointer">
+                         <input type="checkbox" className="w-4 h-4 rounded text-primary border-gray-300 focus:ring-primary" />
+                         <span className="text-sm text-gray-600">{type}</span>
+                       </label>
+                     ))}
+                   </div>
+                </div>
+                
+                <button className="w-full btn-primary py-3">Apply Filters</button>
+             </div>
           </div>
-        ) : (
-          <M.div
-            initial="hidden" animate="show"
-            variants={{ show: { transition: { staggerChildren: 0.1 } } }}
-            className="grid gap-8 md:grid-cols-3"
-          >
-            {rooms.length > 0 ? (
-              rooms.map((room) => (
-                <M.article
-                  key={room._id}
-                  variants={scaleIn}
-                  className="card-light group overflow-hidden"
-                  whileHover={{ y: -8, transition: { type: "spring", stiffness: 300 } }}
-                >
-                  <div className="relative h-56 overflow-hidden">
-                    <img
-                      src={room.images?.[0] || "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80"}
-                      alt={`${room.title} — RPH Hostel Greater Noida`}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    {room.tag && (
-                      <div className="absolute top-3 left-3">
-                        <span className="price-tag">{room.tag}</span>
-                      </div>
-                    )}
-                    <div className="absolute bottom-4 left-4">
-                      <p className="text-3xl font-black text-white">₹{room.price}</p>
-                      <p className="text-xs text-white/60 font-semibold">/ month</p>
-                    </div>
-                  </div>
 
-                  <div className="p-6">
-                    <h2 className="text-xl font-bold text-slate-900 mb-2">{room.title}</h2>
-                    <p className="text-sm text-slate-500 mb-4 leading-relaxed font-bold whitespace-pre-line">
-                      {room.description || "Clean, comfortable room with all basic amenities included."}
-                    </p>
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-6 uppercase tracking-wider">
-                        <span>Capacity: {room.capacity}</span>
-                        <span className={room.availableBeds === 0 ? "text-red-500" : "text-emerald-500"}>
-                            {room.availableBeds} Beds Left
-                        </span>
-                    </div>
-                    <a
-                      href={`/#booking-form?roomType=${encodeURIComponent(room.title)}`}
-                      className="btn-primary w-full justify-center py-3 text-sm"
-                    >
-                      Book This Room <FiArrowRight />
-                    </a>
+          {/* List Content */}
+          <div className="w-full lg:w-3/4 flex flex-col gap-6">
+            {loading ? (
+              [1, 2, 3].map((i) => (
+                <div key={i} className="bg-white border border-gray-200 rounded-2xl h-64 w-full flex overflow-hidden">
+                   <div className="w-1/3 skeleton"></div>
+                   <div className="w-2/3 p-6 flex flex-col gap-4">
+                      <div className="h-6 w-1/2 skeleton"></div>
+                      <div className="h-4 w-3/4 skeleton"></div>
+                      <div className="h-4 w-1/4 skeleton mt-auto"></div>
+                   </div>
+                </div>
+              ))
+            ) : rooms.length > 0 ? (
+              rooms.map((room) => (
+                <div 
+                  key={room._id} 
+                  className="bg-secondary text-white border border-gray-800 rounded-2xl overflow-hidden flex flex-col md:flex-row shadow-sm hover:shadow-lg transition-shadow cursor-pointer"
+                  onClick={() => navigate(`/rooms/${room._id}`)}
+                >
+                  <div className="w-full md:w-1/3 h-56 md:h-auto relative">
+                    <img 
+                      src={room.images?.[0] || "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800"} 
+                      alt={room.title}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                </M.article>
+                  
+                  <div className="w-full md:w-2/3 p-6 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h2 className="text-2xl font-bold mb-1 flex items-center gap-2">
+                            {room.title}
+                            {room.availableBeds > 0 && <FiCheckCircle className="text-green-500" size={16} title="Available" />}
+                          </h2>
+                          <p className="text-sm text-gray-400">{room.tag || "Koramangala, Bengaluru"}</p>
+                        </div>
+                        <div className="flex items-center gap-1 bg-gray-800 px-2 py-1 rounded text-sm font-bold">
+                          <FiStar className="text-yellow-400" size={14} /> 4.8
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 mt-6 text-sm text-gray-400">
+                        <span className="flex items-center gap-1"><FiWifi /> WiFi</span>
+                        <span className="flex items-center gap-1"><MdOutlineKingBed /> AC</span>
+                        <span className="flex items-center gap-1"><FiCoffee /> Food</span>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between items-end mt-6">
+                      <div className="flex flex-col">
+                        <span className="text-2xl font-black text-primary">₹{room.price}</span>
+                        <span className="text-xs text-gray-400">/month</span>
+                      </div>
+                      <button className="bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-6 rounded-lg transition-colors text-sm">
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+                </div>
               ))
             ) : (
-              <div className="col-span-3 text-center py-20 opacity-50">
-                <p className="text-xl font-medium text-white/50">No rooms listed yet.</p>
+              <div className="bg-white border border-gray-200 rounded-2xl p-12 text-center text-gray-500">
+                No rooms available at the moment.
               </div>
             )}
-          </M.div>
-        )}
-
-        {/* CTA note */}
-        {!loading && rooms.length > 0 && (
-          <M.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-            className="mt-16 text-center p-8 rounded-3xl glass border border-white/10"
-          >
-            <p className="text-white/80 font-medium text-lg">
-              Not sure which room to pick?{" "}
-              <Link to="/contact" className="text-indigo-400 font-bold hover:underline">
-                Contact us
-              </Link>{" "}
-              and we'll help you find the perfect fit.
-            </p>
-          </M.div>
-        )}
-      </section>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
