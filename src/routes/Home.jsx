@@ -5,6 +5,7 @@ import axios from "axios";
 import API_URL from "../api";
 import { FiSearch, FiCalendar, FiUsers, FiCheckCircle, FiShield, FiWifi, FiCoffee, FiStar, FiMapPin } from "react-icons/fi";
 import { MdOutlineSecurity, MdOutlineKingBed } from "react-icons/md";
+import FoodMenu from "../components/FoodMenu.jsx";
 
 export default function Home() {
   const [rooms, setRooms] = useState([]);
@@ -262,6 +263,9 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      {/* ── FOOD MENU ── */}
+      <FoodMenu />
 
       {/* ── BOOKING FORM ── */}
       <section id="booking-form" className="py-20 bg-gray-50 border-t border-gray-100">
